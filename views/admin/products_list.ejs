@@ -1,0 +1,190 @@
+<%- include('navbar.ejs') %>
+
+<style>
+.total-orders-box{
+    background: linear-gradient(135deg,#0d6efd,#4dabf7);
+    color:white;
+    padding:18px 25px;
+    border-radius:10px;
+    font-size:20px;
+    font-weight:600;
+    width:260px;
+    margin:20px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.total-orders-box span{
+    font-size:28px;
+    font-weight:700;
+}
+</style>
+
+<%
+let totalStock = 0;
+result.forEach(function(p){
+    totalStock += p.product_stock;
+});
+%>
+
+<div class="main-content">
+
+<div class="container-fluid">
+
+<!-- Dashboard Cards -->
+<div class="d-flex justify-content-start gap-3">
+
+    <div class="total-orders-box">
+        Total Products
+        <span><%= result.length %></span>
+    </div>
+
+    <div class="total-orders-box" style="background:linear-gradient(135deg,#198754,#20c997);">
+        Available Stock
+        <span><%= totalStock %></span>
+    </div>
+
+</div>
+
+<div class="card shadow-lg border-0 rounded-4">
+
+<!-- Header -->
+<div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+<h4 class="mb-0">🛍 Products List</h4>
+<a href="/admin/add_products" class="btn btn-success btn-sm">+ Add Product</a>
+</div>
+
+<!-- Body -->
+<div class="card-body">
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover align-middle text-center small">
+
+<thead class="table-dark">
+<tr>
+<th>Action</th>
+<th>#</th>
+<th>Image</th>
+<th>Name</th>
+<th>Market ₹</th>
+<th>Price ₹</th>
+<th>Discount %</th>
+<th>Rating</th>
+<th>Trending</th>
+<th>For</th>
+<th>Stock</th>
+<th>Color</th>
+<th>Status</th>
+<th>Added Date</th>
+</tr>
+</thead>
+
+<tbody>
+
+<% if(result.length > 0){ %>
+
+<% result.forEach(function(p,i){ %>
+
+<tr>
+
+<td>
+<a href="/admin/edit_product/<%= p.product_id %>" class="btn btn-sm btn-warning me-1">✏️</a>
+
+<a href="/admin/delete_product/<%= p.product_id %>"
+class="btn btn-sm btn-danger"
+onclick="return confirm('Are you sure?')">🗑</a>
+</td>
+
+<td><%= i+1 %></td>
+
+<td>
+<% if(p.product_main_image){ %>
+<img src="/product/<%= p.product_main_image %>" width="60" height="60" class="rounded shadow-sm">
+<% } else { %>
+<span class="text-muted">No Image</span>
+<% } %>
+</td>
+
+<td class="fw-semibold"><%= p.product_name %></td>
+
+<td>₹ <%= p.product_market_price %></td>
+
+<td>₹ <%= p.product_price %></td>
+
+<td>
+<span class="badge bg-info">
+<%= p.apply_discount_percent %>%
+</span>
+</td>
+
+<td>
+<span class="badge bg-warning text-dark">
+⭐ <%= p.product_rating %>
+</span>
+</td>
+
+<td>
+<span class="badge bg-<%= p.product_is_trending === 'yes' ? 'success' : 'secondary' %>">
+<%= p.product_is_trending %>
+</span>
+</td>
+
+<td>
+<%= p.product_for %>
+
+<% if(p.product_for === 'kids'){ %>
+(<%= p.product_kid_type %>)
+<% } %>
+
+</td>
+
+<td>
+<span class="badge bg-<%= p.product_stock > 0 ? 'success' : 'danger' %>">
+<%= p.product_stock %>
+</span>
+</td>
+
+<td><%= p.product_color %></td>
+
+<td>
+<span class="badge bg-<%= p.status === 'active' ? 'success' : 'secondary' %>">
+<%= p.status %>
+</span>
+</td>
+
+<td>
+<%= new Date(p.product_added_date).toLocaleDateString() %>
+</td>
+
+</tr>
+
+<% }) %>
+
+<% } else { %>
+
+<tr>
+<td colspan="14" class="text-muted text-center">
+No products found
+</td>
+</tr>
+
+<% } %>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<%- include('footer.ejs') %>

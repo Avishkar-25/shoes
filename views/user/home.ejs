@@ -1,0 +1,580 @@
+
+   <%- include('navbar.ejs') %>
+
+<style>
+        
+        /* Hero Slider Styles */
+        .hero-slider {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 50px;
+            height: 600px;
+        }
+        
+        .carousel-item {
+            height: 600px;
+        }
+        
+        .carousel-item img {
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .carousel-caption {
+            position: absolute;
+            right: 15%;
+            bottom: auto;
+            left: 15%;
+            top: 50%;
+            transform: translateY(-50%);
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+            color: #fff;
+            text-align: left;
+            width: 100%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .carousel-caption h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .carousel-caption h1 span {
+            color: var(--primary-color);
+        }
+        
+        .carousel-caption p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.2);
+            color: white;
+        }
+        
+        .btn-secondary-custom {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary-custom:hover {
+            background-color: white;
+            color: var(--dark-color);
+        }
+        
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-control-prev {
+            left: 30px;
+        }
+        
+        .carousel-control-next {
+            right: 30px;
+        }
+        
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            opacity: 1;
+            background-color: var(--primary-color);
+        }
+        
+        .carousel-indicators {
+            bottom: 30px;
+        }
+        
+        .carousel-indicators button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin: 0 8px;
+            border: 2px solid white;
+            background-color: transparent;
+        }
+        
+        .carousel-indicators button.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .product-card {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-img {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+            background-color: #f8f9fa;
+        }
+        
+        .product-category {
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary-color);
+        }
+        
+        .badge-new {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .badge-sale {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .feature-box {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 15px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .feature-box h4 {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .category-card {
+            border-radius: 15px;
+            overflow: hidden;
+            height: 300px;
+            position: relative;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .category-card:hover .category-img {
+            transform: scale(1.1);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+        }
+        
+        .category-title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+       /* discount section */
+        .product-card {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-img {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+            background-color: #f8f9fa;
+        }
+        
+        .product-category {
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary-color);
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.1rem;
+            margin-left: 10px;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            z-index: 2;
+        }
+        
+        .discount-ribbon {
+            position: absolute;
+            top: 20px;
+            left: -35px;
+            background-color: #ff3333;
+            color: white;
+            padding: 8px 40px;
+            transform: rotate(-45deg);
+            font-weight: 700;
+            font-size: 0.9rem;
+            z-index: 2;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .discount-info {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .discount-feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .discount-feature i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-right: 15px;
+            width: 25px;
+        }
+        
+       
+    </style>
+</head>
+<body>
+   
+
+    <!-- Hero Slider -->
+    <section class="hero-slider">
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <!-- Indicators -->
+             
+            <div class="carousel-indicators">
+                <% for (var i=0;i<sliders.length;i++) {%>
+
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="<%-i %>" class="<%- (i ==0) ? 'active':'' %>" ></button>
+               <% } %>
+            </div>
+            
+            <!-- Slides -->
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+
+                <% for (var i=0;i<sliders.length;i++) {%>
+                <div class="carousel-item <%- (i ==0) ? 'active':'' %>" >
+                    <img src="/slider/<%=sliders[i].slider_image%>" class="d-block w-100" alt="Premium Sneakers">
+                    <div class="carousel-caption">
+                        <h1><%=sliders[i].slider_title%></h1>
+                        <p><%=sliders[i].slider_description%></p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="<%=sliders[i].slider_button_link%>" class="btn btn-primary-custom "><%=sliders[i].slider_button%></a>
+                            <!-- <a href="#" class="btn btn-secondary-custom"></a> -->
+                        </div>
+                    </div>
+                </div>
+                <% }%>
+          
+            
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products py-5">
+        <div class="container">
+            <div class="section-title">
+                <h2>Trending Products</h2>
+            </div>
+            
+            <div class="row">
+                <!-- Product 1 -->
+                 <% for (var i=0;i<trending_products.length;i++) { %>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card product-card">
+                        <div class="position-relative">
+                            <img src="/product/<%-trending_products[i].product_main_image %>" class="product-img" alt="Nike Air Max">
+                            <span class="badge-new">Trending</span>
+                        </div>
+                        <div class="card-body">
+                            <!-- <p class="product-category">Running Shoes</p> -->
+                            <h5 class="product-title"><%-trending_products[i].product_name %></h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="product-price"><%-trending_products[i].product_price %></p>
+                                <a href="/product_details/<%=trending_products[i].product_id%>"><button class="btn btn-primary-custom btn-sm">Buy Now</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+           
+            </div>
+        </div>
+    </section>
+
+  
+
+    <!-- Categories Section -->
+    <section class="categories py-5">
+        <div class="container">
+            <div class="section-title">
+                <h2>Shop By Types</h2>
+            </div>
+            <div class="row">
+             <% for (var i=0;i<product_type.length;i++) {%>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="category-card">
+                        <img src="/types/<%-product_type[i].product_type_image %>" class="category-img" alt="Men's Shoes">
+                        <div class="category-overlay">
+                            <h3 class="category-title"><%-product_type[i].product_type_name %></h3>
+                        </div>
+                    </div>
+                </div>
+                <% }%>
+                
+               
+            </div>
+        </div>
+    </section>
+
+     <!-- Discount Products Section -->
+    <section class="discount-products">
+        <div class="container">
+            <div class="section-title">
+                <h2>Discounted Products</h2>
+                <p class="mt-3">Limited time offers on our best-selling products</p>
+            </div>
+            
+            <div class="row">
+                 <% for (var i=0;i<trending_products.length;i++) { %>
+                <!-- Discount Product 1 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="product-card">
+                        <div class="discount-ribbon"><%=trending_products[i].apply_discount_percent %>% OFF</div>
+                        <!-- <div class="discount-badge">SAVE $90</div> -->
+                        <div class="position-relative">
+                            <img src="/product/<%=trending_products[i].product_main_image %>" class="product-img" alt="Nike Air Max">
+                        </div>
+                        <div class="card-body">
+                            <!-- <p class="product-category">Running Shoes</p> -->
+                            <h5 class="product-title"><%=trending_products[i].product_name %></h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="product-price"><%=trending_products[i].product_price %> </span>
+                                    <span class="original-price"><%=trending_products[i].product_market_price %></span>
+                                </div>
+                                <a href="/product_details/<%=trending_products[i].product_id%>"><button class="btn btn-primary btn-sm">Buy Now</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                
+              
+            </div>
+        </div>
+    </section>
+   
+
+    <!-- Features Section -->
+    <section class="features py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h4>Free Shipping</h4>
+                        <p>Free delivery on orders over $50. Fast shipping across the country.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-undo-alt"></i>
+                        </div>
+                        <h4>30-Day Returns</h4>
+                        <p>Not satisfied? Return your purchase within 30 days for a full refund.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Secure Payment</h4>
+                        <p>Your payment information is secured with 256-bit SSL encryption.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>24/7 Support</h4>
+                        <p>Have questions? Our customer support team is available 24/7.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+   <%- include('footer.ejs') %>
+
+

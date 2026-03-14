@@ -1,0 +1,414 @@
+<%- include('navbar.ejs') %>
+
+<style>
+body {
+    background: #f0f2f5;
+    font-family: 'Inter', sans-serif;
+    margin:0;
+    padding:0;
+}
+
+.invoice-wrapper {
+    max-width: 1000px;
+    margin: 2rem auto;
+}
+
+.invoice-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    transition: 0.3s;
+}
+.invoice-card:hover {
+    box-shadow: 0 30px 50px rgba(0,0,0,0.12);
+}
+
+.print-controls {
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-bottom:20px;
+}
+.btn-print {
+    background:white;
+    border:1px solid #e0e0e0;
+    padding:10px 24px;
+    border-radius:50px;
+    font-weight:500;
+    color:#2d3436;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:0.2s;
+}
+.btn-print:hover {
+    background:#667eea;
+    color:white;
+    border-color:#667eea;
+}
+.btn-delete {
+    border-color:#f87171;
+    color:#f87171;
+}
+.btn-delete:hover {
+    background:#f87171;
+    color:white;
+}
+
+/* Header Gradient + shop brand */
+.invoice-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 40px;
+    color:white;
+}
+.shop-brand h2 {
+    font-weight:700;
+    font-size:28px;
+    margin:0;
+}
+.shop-brand .gst {
+    font-size:14px;
+    opacity:0.9;
+    margin-top:5px;
+}
+.invoice-meta {
+    text-align:right;
+}
+.invoice-badge {
+    background: rgba(255,255,255,0.2);
+    padding:6px 14px;
+    border-radius:50px;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:10px;
+    display:inline-block;
+}
+.invoice-number {
+    font-size:18px;
+    font-weight:600;
+}
+.invoice-date {
+    font-size:14px;
+    opacity:0.9;
+}
+
+/* Status bar with nice dots */
+.status-bar {
+    background:#f8faff;
+    padding:20px 40px;
+    border-bottom:1px solid #eef2f7;
+    display:flex;
+    gap:40px;
+    flex-wrap:wrap;
+}
+.status-item {
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+.status-dot {
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#48bb78;
+}
+.status-dot.pending { background:#fbbf24; }
+.status-dot.cancelled { background:#f87171; }
+.status-label { font-size:13px; color:#718096; margin-bottom:2px; }
+.status-value { font-weight:600; color:#1a202c; }
+
+/* Address Cards */
+.address-section {
+    padding:30px 40px;
+    background:#fff;
+    border-bottom:1px solid #eef2f7;
+}
+.address-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+.address-card {
+    background:#f8faff;
+    padding:20px;
+    border-radius:16px;
+    transition:0.2s;
+}
+.address-card:hover {
+    background:#667eea10;
+}
+.address-icon {
+    width:36px;
+    height:36px;
+    background:#667eea20;
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:12px;
+    font-size:18px;
+}
+.address-title {
+    font-size:16px;
+    font-weight:600;
+    color:#1a202c;
+    margin-bottom:12px;
+}
+.address-content {
+    color:#4a5568;
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* Product table */
+.products-section { padding:30px 40px; }
+.section-title {
+    font-size:18px;
+    font-weight:600;
+    color:#1a202c;
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.section-title span {
+    background:#667eea20;
+    padding:6px 12px;
+    border-radius:50px;
+    font-size:13px;
+    color:#667eea;
+}
+
+.modern-table { width:100%; border-collapse:collapse; }
+.modern-table th {
+    background:#f8faff;
+    padding:15px;
+    font-size:13px;
+    font-weight:600;
+    color:#4a5568;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    border-bottom:2px solid #e2e8f0;
+}
+.modern-table td {
+    padding:15px;
+    border-bottom:1px solid #eef2f7;
+    color:#2d3748;
+    vertical-align:middle;
+}
+
+.product-info { display:flex; align-items:center; gap:12px; }
+.product-image {
+    width:60px;
+    height:60px;
+    border-radius:12px;
+    background:#f0f2f5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+.product-image img {
+    max-width:100%;
+    max-height:100%;
+    border-radius:12px;
+}
+
+/* Price Summary Box */
+.price-summary {
+    margin-top:30px;
+    padding-top:20px;
+    border-top:2px dashed #e2e8f0;
+    display:flex;
+    justify-content:flex-end;
+}
+.summary-box {
+    width:350px;
+    background:#f8faff;
+    padding:25px;
+    border-radius:16px;
+}
+.summary-row {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:12px;
+    font-size:15px;
+    color:#4a5568;
+}
+.summary-row.total {
+    margin-top:15px;
+    padding-top:15px;
+    border-top:2px solid #e2e8f0;
+    font-size:20px;
+    font-weight:700;
+    color:#1a202c;
+}
+.summary-row.discount { color:#48bb78; }
+
+/* Footer */
+.invoice-footer {
+    background:#f8faff;
+    padding:30px 40px;
+    text-align:center;
+    border-top:1px solid #eef2f7;
+}
+.footer-message { font-size:16px; color:#4a5568; margin-bottom:15px; }
+.footer-message strong { color:#667eea; }
+.signature-line { margin-top:25px; display:flex; justify-content:center; gap:50px; }
+.signature-item { text-align:center; }
+.signature-line .line { width:150px; height:1px; background:#cbd5e0; margin-bottom:8px; }
+.signature-label { font-size:12px; color:#718096; }
+
+@media print {
+    body { background:white; padding:0; }
+    .print-controls, .navbar, footer { display:none !important; }
+    .invoice-card { box-shadow:none; border:1px solid #eee; margin:0; border-radius:0; }
+}
+@media (max-width:768px){
+    .invoice-header{padding:25px;}
+    .status-bar{flex-direction:column; gap:15px; padding:20px;}
+    .address-grid{grid-template-columns:1fr; gap:15px;}
+    .products-section{padding:20px;}
+    .summary-box{width:100%;}
+    .signature-line{flex-direction:column; gap:20px;}
+}
+</style>
+
+<div class="container invoice-wrapper">
+<% if(orders.length>0){ %>
+    <% orders.forEach(function(order){ %>
+        <div class="invoice-card">
+            <!-- Print & Delete -->
+            <div class="print-controls">
+                <button onclick="window.print()" class="btn-print">🖨️ Print Invoice</button>
+                <button onclick="deleteOrder('<%= order.order_id %>')" class="btn-print btn-delete">🗑️ Cancel Order</button>
+            </div>
+
+            <!-- Header -->
+            <div class="invoice-header">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <div class="shop-brand">
+                            <h2>My Shop</h2>
+                            <div class="gst">GSTIN: 22AAAAA0000A1Z5</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="invoice-meta">
+                            <div class="invoice-badge">TAX INVOICE</div>
+                            <div class="invoice-number">#<%= order.order_id %></div>
+                            <div class="invoice-date"><%= new Date(order.order_date).toLocaleDateString() %></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-dot <%= order.payment_status==='paid'?'':'pending' %>"></div>
+                    <div><div class="status-label">Payment Status</div><div class="status-value"><%= order.payment_status==='paid'?'Paid':'Pending' %></div></div>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot <%= order.order_status==='delivered'?'':'pending' %>"></div>
+                    <div><div class="status-label">Order Status</div><div class="status-value"><%= order.order_status.charAt(0).toUpperCase()+order.order_status.slice(1) %></div></div>
+                </div>
+                <div class="status-item">
+                    <div class="status-dot" style="background:#667eea;"></div>
+                    <div><div class="status-label">Payment Method</div><div class="status-value"><%= order.payment_method %></div></div>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="address-section">
+                <div class="address-grid">
+                    <div class="address-card">
+                        <div class="address-icon">👤</div>
+                        <div class="address-title">Customer Details</div>
+                        <div class="address-content">
+                            <p><strong><%= order.full_name %></strong></p>
+                            <p>📞 <%= order.mobile %></p>
+                            <% if(order.email){ %><p>✉️ <%= order.email %></p><% } %>
+                        </div>
+                    </div>
+                    <div class="address-card">
+                        <div class="address-icon">📦</div>
+                        <div class="address-title">Shipping Address</div>
+                        <div class="address-content">
+                            <p><%= order.area %>, <%= order.city %></p>
+                            <p><%= order.state %> - <%= order.pincode %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="products-section">
+                <div class="section-title">Order Summary <span><%= order.products.length %> items</span></div>
+                <table class="modern-table">
+                    <thead>
+                        <tr><th>Image</th><th>Name</th><th>Size</th><th>Price</th><th>Qty</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                    <% let grand_total = 0; %>
+                    <% order.products.forEach(function(p){ %>
+                        <tr>
+                            <td class="product-info">
+                               <div class="product-image">
+    <% if(p.product_main_image){ %>
+        <img src="/product/<%= p.product_main_image %>" alt="<%= p.product_name %>">
+    <% } else { %>
+        🛍️
+    <% } %>
+</div>
+                            </td>
+                            <td><%= p.product_name %></td>
+                            <td><%= p.product_size || '-' %></td>
+                            <td>₹<%= Number(p.product_price).toFixed(2) %></td>
+                            <td><%= p.product_qty %></td>
+                            <td>₹<%= Number(p.product_total).toFixed(2) %></td>
+                        </tr>
+                        <% grand_total += parseFloat(p.product_total); %>
+                    <% }) %>
+                    </tbody>
+                </table>
+
+                <div class="price-summary">
+                    <div class="summary-box">
+                        <div class="summary-row"><span>Subtotal:</span><span>₹<%= grand_total.toFixed(2) %></span></div>
+                        <div class="summary-row"><span>Shipping:</span><span>₹0.00</span></div>
+                        <% if(order.discount>0){ %>
+                            <div class="summary-row discount"><span>Discount:</span><span>-₹<%= Number(order.discount).toFixed(2) %></span></div>
+                        <% } %>
+                        <div class="summary-row total"><span>Total Amount:</span><span>₹<%= Number(order.total_amount).toFixed(2) %></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-footer">
+                <div class="footer-message">Thank you for shopping with us! <strong>❤️</strong></div>
+                <div class="footer-message" style="font-size:14px;">We hope to see you again soon</div>
+            </div>
+        </div>
+    <% }) %>
+<% } else { %>
+    <div class="invoice-card" style="padding:60px; text-align:center;">
+        <div style="font-size:48px; margin-bottom:20px;">📭</div>
+        <h4>No Orders Found</h4>
+        <p style="color:#718096;">There are no orders to display.</p>
+    </div>
+<% } %>
+</div>
+
+<script>
+function deleteOrder(orderId){
+    if(confirm("Are you sure you want to delete this order?")){
+        window.location.href="/delete_order/" + orderId;
+    }
+}
+</script>
+
+<%- include('footer.ejs') %>

@@ -1,0 +1,74 @@
+<%- include('navbar.ejs') %>
+
+<div class="main-content">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <div class="card shadow-lg border-0 rounded-4">
+                    
+                    <!-- Header -->
+                    <div class="card-header bg-dark text-white text-center rounded-top-4">
+                        <h4 class="mb-0">🎞 Add Homepage Slider</h4>
+                    </div>
+
+                    <!-- Form -->
+                    <div class="card-body">
+                        <form action="/admin/save_slider" method="post" enctype="multipart/form-data">
+
+                            <!-- Slider Image -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Slider Image</label>
+                                <input type="file" name="slider_image" class="form-control" required>
+                                <small class="text-muted">Recommended size: 1920 × 600</small>
+                            </div>
+
+                            <!-- Slider Title -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Slider Title</label>
+                                <input type="text" name="slider_title" class="form-control"
+                                       placeholder="Enter slider title">
+                            </div>
+
+                            <!-- Slider Description -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Slider Description</label>
+                                <textarea name="slider_description" id="editor" class="form-control" rows="3"
+                                          placeholder="Enter slider description"></textarea>
+                            </div>
+
+                            <!-- Button Text -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Button Text</label>
+                                <input type="text" name="slider_button" class="form-control"
+                                       placeholder="Shop Now / Learn More">
+                            </div>
+
+                            <!-- Button Link -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Button Link</label>
+                                <input type="url" name="slider_button_link" class="form-control"
+                                       placeholder="https://example.com">
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="submit" class="btn btn-success px-4">
+                                    💾 Save Slider
+                                </button>
+                                <a href="/admin/slider_images_list" class="btn btn-secondary px-4">
+                                   View List
+                                </a>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.ejs') %>

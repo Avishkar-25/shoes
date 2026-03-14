@@ -1,0 +1,22 @@
+<%- include('navbar.ejs') %>
+
+<div class="container my-5">
+    <h2>Edit Profile</h2>
+    <form action="/update_profile" method="POST">
+        <div class="mb-3">
+            <label>Name</label>
+            <input type="text" name="name" class="form-control" value="<%= result[0].name %>" required>
+        </div>
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" value="<%= result[0].email %>" required>
+        </div>
+        <div class="mb-3">
+            <label>Mobile</label>
+            <input type="text" name="mobile" class="form-control" value="<%= result[0].mobile %>" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+
+<%- include('footer.ejs') %>

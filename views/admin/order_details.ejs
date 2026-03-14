@@ -1,0 +1,107 @@
+<%- include('navbar.ejs') %>
+
+<div class="main-content" style="margin-left:250px; padding:25px; background:#f4f6f9; min-height:100vh;">
+
+    <h2 class="mb-4">Order Details
+        <% if(info.order_status =='paced') {%>}
+        <a href="/admin/change_order_to_dispatch/<%= info.order_id %>">
+    <button class="btn btn-primary float-end">Dispatch</button>
+</a>
+
+<a href="/admin/change_order_to_reject/<%= info.order_id %>">
+    <button class="btn btn-danger float-end me-2">Reject</button>
+</a>
+<% } %>
+   <% if(info.order_status =='Dispatched') {%>}
+        <a href="/admin/change_order_to_delivered/<%= info.order_id %>">
+    <button class="btn btn-primary float-end">Mark Delivered</button>
+</a>
+
+<a href="/admin/change_order_to_cancel/<%= info.order_id %>">
+    <button class="btn btn-danger float-end me-2">Cancel</button>
+</a>
+<% } %>
+
+    </h2>
+    
+
+    <!-- Order Info Card -->
+    <div class="card shadow mb-4">
+        <div class="card-header bg-dark text-white">
+            Order Info
+
+           
+        </div>
+        <div class="card-body">
+            <p><strong>Order ID:</strong> <%= info.order_id %></p>
+            <p><strong>Name:</strong> <%= info.full_name %></p>
+            <p><strong>Mobile:</strong> <%= info.mobile %></p>
+            <p><strong>Address:</strong> 
+                <%= info.area %>, <%= info.city %>, 
+                <%= info.state %> - <%= info.pincode %>
+            </p>
+            <p><strong>Payment:</strong> <%= info.payment_method %></p>
+            <p><strong>Status:</strong> 
+                <span class="badge bg-warning text-dark">
+                    <%= info.order_status %>
+                </span>
+            </p>
+            <p><strong>Date:</strong> 
+                <%= new Date(info.order_date).toLocaleString() %>
+            </p>
+            <p><strong>Transaction ID:</strong> <%= info.transaction_id %></p>
+            <p><strong>Order Status:</strong> <%= info.order_status %></p>
+        </div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            Ordered Products
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% if(products.length > 0){ %>
+                            <% products.forEach(function(p){ %>
+                                <tr>
+                                    <td><%= p.product_name %></td>
+                                    <td>₹ <%= p.product_price %></td>
+                                    <td><%= p.product_qty %></td>
+                                    <td>₹ <%= p.product_price * p.product_qty %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="4">No Products Found</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total -->
+    <div class="card mt-4 shadow">
+        <div class="card-body text-end">
+            <h4>Total Amount: ₹ <%= info.total_amount %></h4>
+        </div>
+    </div>
+
+</div>
+
+<%- include('footer.ejs') %>

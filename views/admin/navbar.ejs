@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap 5 Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --sidebar-bg: #2c3e50;
+            --sidebar-active: #3498db;
+            --topbar-bg: #ffffff;
+            --topbar-shadow: 0 2px 4px rgba(0,0,0,.08);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--sidebar-bg);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sidebar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-brand i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+            color: var(--sidebar-active);
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+            overflow-y: auto;
+            height: calc(100vh - 80px);
+        }
+        
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 2px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-left-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .sidebar-menu a.active {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: white;
+            border-left-color: var(--sidebar-active);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .sidebar-menu .menu-text {
+            flex-grow: 1;
+        }
+        
+        .sidebar-menu .badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        /* Top Navbar Styles */
+        .topbar {
+            background-color: var(--topbar-bg);
+            height: 70px;
+            padding: 0 1.5rem;
+            box-shadow: var(--topbar-shadow);
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+        
+        .topbar-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            color: #6c757d;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            display: none; /* Hidden by default on desktop */
+        }
+        
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+        
+        .search-box input {
+            border-radius: 50px;
+            padding-left: 40px;
+            border: 1px solid #e0e0e0;
+            width: 100%;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .topbar-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .topbar-item {
+            margin-left: 1.5rem;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .topbar-icon {
+            font-size: 1.3rem;
+            color: #6c757d;
+            transition: color 0.3s;
+        }
+        
+        .topbar-icon:hover {
+            color: var(--sidebar-active);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .user-info {
+            line-height: 1.2;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .user-role {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            margin-top: 70px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .breadcrumb {
+            background: none;
+            padding: 0;
+            margin-bottom: 0;
+        }
+        
+        .breadcrumb-item a {
+            color: #6c757d;
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item.active {
+            color: #2c3e50;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--sidebar-active);
+        }
+        
+        .stat-card .stat-icon {
+            font-size: 2.5rem;
+            color: var(--sidebar-active);
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .stat-card .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+            color: #2c3e50;
+            padding: 1rem 1.5rem;
+        }
+        
+        /* Content area */
+        .content-wrapper {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table th {
+            font-weight: 600;
+            color: #2c3e50;
+            border-top: none;
+        }
+        
+        .table td {
+            border-top: 1px solid #f1f1f1;
+        }
+        
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        
+        .sidebar-footer {
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .dropdown-menu {
+            padding: 4px !important;
+            min-width: 180px;
+        }
+        
+        .dropdown-item {
+            padding: 4px 10px !important;
+            font-size: 14px;
+            color: #333 !important;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        /* Orders dropdown specific */
+        .nav-item.dropdown .dropdown-menu {
+            background-color: var(--sidebar-bg);
+            border: none;
+        }
+        
+        .nav-item.dropdown .dropdown-item {
+            color: rgba(255, 255, 255, 0.8) !important;
+            margin-left: 30px;
+            padding-left: 10px !important;
+        }
+        
+        .nav-item.dropdown .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: white !important;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1199.98px) {
+            .search-box {
+                width: 250px;
+            }
+        }
+        
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1001;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .topbar {
+                left: 0;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .toggle-sidebar {
+                display: block; /* Show toggle button on mobile */
+            }
+            
+            .search-box {
+                width: 200px;
+            }
+        }
+        
+        @media (max-width: 767.98px) {
+            .search-box {
+                width: 180px;
+            }
+            
+            .topbar {
+                padding: 0 1rem;
+            }
+            
+            .topbar-item {
+                margin-left: 1rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 575.98px) {
+            .search-box {
+                display: none; /* Hide search on very small screens */
+            }
+            
+            .user-info {
+                display: none; /* Hide user info on very small screens */
+            }
+            
+            .user-dropdown i.bi-chevron-down {
+                display: none; /* Hide dropdown arrow */
+            }
+            
+            .topbar-item.user-dropdown {
+                margin-left: 0.5rem;
+            }
+        }
+        
+        /* Backdrop overlay for mobile sidebar */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .sidebar-backdrop.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Backdrop (Mobile Only) -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+    
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
+                <span>Footware</span>
+            </a>
+            <button class="toggle-sidebar d-lg-none" id="closeSidebar">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="/admin" class="active">
+                        <i class="bi bi-house-door"></i>
+                        <span class="menu-text">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/users">
+                        <i class="bi bi-bar-chart"></i>
+                        <span class="menu-text">Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/add_products">
+                        <i class="bi bi-people"></i>
+                        <span class="menu-text">Add Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/products_list">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="menu-text">Products List</span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="/admin/orders" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-cart"></i>
+                        <span class="menu-text">Orders</span>
+                    </a>
+                    <ul class="dropdown-menu p-1">
+                        <li><a class="dropdown-item" href="/admin/pending_orders">Pending Orders</a></li>
+                        <li><a class="dropdown-item" href="/admin/dispatch_orders">Dispatch</a></li>
+                        <li><a class="dropdown-item" href="/admin/delivered_orders">Delivered</a></li>
+                        <li><a class="dropdown-item" href="/admin/cancelled_orders">Cancelled</a></li>
+                        <li><a class="dropdown-item" href="/admin/return_orders">Return Orders</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/admin/promotional_banners">
+                        <i class="bi bi-wallet2"></i>
+                        <span class="menu-text">Promotional Banners</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/admin/slider_images">
+                        <i class="bi bi-file-text"></i>
+                        <span class="menu-text">Slider Images</span>
+                    </a>
+                </li>
+                  <li>
+                    <a href="/admin/product_brands">
+                         <i class="bi bi-shop"></i>
+                         <span class="menu-text">Product Brands</span>
+                    </a>
+                </li>
+                 <li>
+                   <a href="/admin/product_styles">
+                        <i class="bi bi-palette"></i>
+                        <span class="menu-text">Product Styles</span>
+                    </a>
+                </li>
+                 <li>
+                   <a href="/admin/product_types">
+                        <i class="bi bi-tags"></i>
+                        <span class="menu-text">Product Types</span>
+                    </a>
+                </li>
+            </ul>
+            
+           
+        </div>
+    </nav>
+    
+
+
+    <!-- Top Navbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="toggle-sidebar" id="toggleSidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <!-- <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" class="form-control" placeholder="Search...">
+            </div> -->
+        </div>
+        
+        <div class="topbar-right">
+            <!-- <div class="topbar-item">
+                <i class="bi bi-bell topbar-icon"></i>
+                <span class="notification-badge">3</span>
+            </div> -->
+            <div class="topbar-item dropdown">
+                <div class="user-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=3498db&color=fff" alt="User Avatar" class="user-avatar">
+                    <div class="user-info">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                    <i class="bi bi-chevron-down ms-2"></i>
+                </div>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-question-circle me-2"></i> Help</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    
+    
+   
+
+  <% include('footer.ejs') %>

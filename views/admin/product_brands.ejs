@@ -1,0 +1,173 @@
+<%- include('navbar.ejs') %>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- ADD BRAND BUTTON -->
+    <div class="container mb-4 d-flex justify-content-end">
+        <button type="button"
+                class="btn btn-gradient shadow"
+                data-bs-toggle="modal"
+                data-bs-target="#addBrandModal">
+            ➕ Add Product Brand
+        </button>
+    </div>
+
+    <!-- ADD BRAND MODAL -->
+    <div class="modal fade" id="addBrandModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg">
+
+                <div class="modal-header modal-gradient text-white rounded-top-4">
+                    <h5 class="modal-title">➕ Add Product Brand</h5>
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <form action="/admin/save_product_brand" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Brand Name</label>
+                            <input type="text"
+                                   name="product_brand_name"
+                                   class="form-control rounded-3"
+                                   placeholder="Enter brand name"
+                                   required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Brand Status</label>
+                            <select name="product_brand_status"
+                                    class="form-select rounded-3"
+                                    required>
+                                <option value="">Select status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit"
+                                    class="btn btn-success fw-semibold">
+                                💾 Save Brand
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- BRAND LIST -->
+    <div class="container mt-4">
+        <div class="card shadow-lg border-0 rounded-4">
+
+            <div class="card-header table-gradient text-white rounded-top-4">
+                <h5 class="mb-0">📋 Product Brands List</h5>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle text-center mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Action</th>
+                                <th>#</th>
+                                <th>Brand Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% if (result.length > 0) { %>
+                                <% result.forEach((row, i) => { %>
+                                    <tr>
+                                        <td>
+                                            <a href="/admin/edit_product_brand/<%= row.product_brand_id %>"
+                                               class="btn btn-sm btn-warning me-1">✏️</a>
+
+                                            <a href="/admin/delete_product_brand/<%= row.product_brand_id %>"
+                                               class="btn btn-sm btn-danger"
+                                               onclick="return confirm('Are you sure?')">🗑</a>
+                                        </td>
+
+                                        <td><%= i + 1 %></td>
+
+                                        <td class="fw-semibold">
+                                            <%= row.product_brand_name %>
+                                        </td>
+
+                                        <td>
+                                            <span class="badge <%= row.product_brand_status === 'active'
+                                                ? 'bg-success' : 'bg-danger' %>">
+                                                <%= row.product_brand_status %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-muted py-4">
+                                        No brands found
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- STYLES -->
+<style>
+.main-content {
+    margin-left: 240px;   /* sidebar width */
+    margin-top: 80px;     /* navbar height */
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+.btn-gradient {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border-radius: 30px;
+    padding: 10px 25px;
+}
+
+.modal-gradient {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+}
+
+.table-gradient {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.01);
+    transition: 0.2s ease;
+}
+</style>
+
+<%- include('footer.ejs') %>

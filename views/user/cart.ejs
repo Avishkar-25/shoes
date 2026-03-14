@@ -1,0 +1,242 @@
+<%- include('navbar.ejs') %>
+
+<style>
+body {
+    background: #f5f7fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.cart-page {
+    padding: 50px 0;
+}
+.cart-content {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.cart-items {
+    flex: 1 1 600px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+.cart-header {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
+    font-weight: 600;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e2e8f0;
+}
+.cart-item {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+}
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+.item-price, .item-total {
+    text-align: center;
+    font-weight: 700;
+    color: #3a86ff;
+}
+.quantity-control {
+    text-align: center;
+}
+.cart-summary {
+    flex: 0 1 300px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+}
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.summary-total {
+    font-weight: 700;
+    margin-top: 10px;
+}
+</style>
+
+<% 
+var sum = 0;
+for (var i = 0; i < cart_data.length; i++) {
+    sum += cart_data[i].product_price * cart_data[i].qty;
+}
+%>
+
+<section class="cart-page">
+    <div class="container cart-content">
+
+        <!-- LEFT SIDE SUMMARY -->
+        <div class="cart-summary">
+            <h4>Order Summary</h4>
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>₹<%= sum %></span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span>₹0</span>
+            </div>
+             <div class="summary-row">
+                <span>Tax</span>
+                <span>₹0</span>
+            </div>
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <span>₹<%= sum %></span>
+            </div>
+               <% if(is_login) { %>
+                <button class="btn btn-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#getUserAddressModal">Proceed to Checkout</button>
+                <% } else { %>
+                      <button class="btn btn-primary w-100 mt-3"  data-bs-toggle="modal" data-bs-target="#getUserEmailModal">Proceed to Checkout</button>
+                    <% } %>
+        </div>
+
+        <!-- RIGHT SIDE CART -->
+        <div class="cart-items">
+            <div class="cart-header">
+                <div>Product</div>
+                <div>Price</div>
+                <div>Quantity</div>
+                <div>Total</div>
+                <div>Action</div>
+            </div>
+
+           <% for (var i = 0; i < cart_data.length; i++) { %>
+<div class="cart-item">
+
+    <div class="item-info">
+        <img src="/product/<%= cart_data[i].product_image %>" class="item-image">
+        <div>
+            <h3><%= cart_data[i].product_name %></h3>
+            <p>Size: <%= cart_data[i].size %></p>
+        </div>
+    </div>
+
+    <div class="item-price">
+        ₹<%= cart_data[i].product_price %>
+    </div>
+
+    <div class="quantity-control">
+        <%= cart_data[i].qty %>
+    </div>
+
+    <div class="item-total">
+        ₹<%= cart_data[i].product_price * cart_data[i].qty %>
+    </div>
+
+    <div>
+        <!-- ✅ FIX HERE -->
+        <a href="/delete_cart/<%= cart_data[i].cart_id %>">
+            <button class="btn btn-danger">Remove</button>
+        </a>
+    </div>
+
+</div>
+<% } %>
+
+        </div>
+
+    </div>
+</section>
+
+
+  <!-- Modal for Address -->
+<div class="modal fade" id="getUserAddressModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- ONLY ONE FORM -->
+      <form action="/place_order" method="post">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Fill Address Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label>Full Name</label>
+              <input type="text" class="form-control" name="full_name" required>
+            </div>
+
+            <div class="col-md-6">
+              <label>Mobile</label>
+              <input type="tel" class="form-control" name="mobile" required>
+            </div>
+
+            <div class="col-md-6">
+              <label>Pincode</label>
+              <input type="text" class="form-control" name="pincode"
+                     onkeyup="getStateAndCity()" id="pincode">
+            </div>
+
+            <div class="col-md-6">
+              <label>City</label>
+              <input type="text" class="form-control" name="city" id="city" readonly required>
+            </div>
+
+            <div class="col-12">
+              <label>Address</label>
+              <textarea class="form-control" name="address" rows="3" required></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label>State</label>
+              <input type="text" class="form-control" name="state" id="state" readonly required>
+            </div>
+           
+
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success w-100">
+            Place Order
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function redirect_to_buy_now() {
+
+  var otpEl = document.getElementById('getUserOtpModal');
+  var otpModal = bootstrap.Modal.getInstance(otpEl) || new bootstrap.Modal(otpEl);
+  otpModal.hide();
+
+  // Remove backdrop manually
+  document.body.classList.remove('modal-open');
+  document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+
+  var addressEl = document.getElementById('getUserAddressModal');
+  var addressModal = new bootstrap.Modal(addressEl);
+  addressModal.show();
+}
+
+
+</script>
+<%- include('footer.ejs') %>

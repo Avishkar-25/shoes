@@ -1,0 +1,75 @@
+<%- include('navbar.ejs') %>
+
+<div class="main-content">
+  <div class="container mt-4">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+      <div class="card-header bg-warning text-dark">
+        <h5>✏️ Edit Product Type</h5>
+      </div>
+
+      <div class="card-body">
+
+        <form action="/admin/update_product_type" method="post" enctype="multipart/form-data">
+
+          <!-- Hidden ID -->
+          <input type="hidden" name="product_type_id" value="<%= type.product_type_id %>">
+
+          <!-- IMPORTANT -->
+          <input type="hidden" name="old_image" value="<%= type.product_type_image %>">
+
+          <!-- Name -->
+          <div class="mb-3">
+            <label>Name</label>
+            <input type="text" name="product_type_name"
+                   value="<%= type.product_type_name %>"
+                   class="form-control" required>
+          </div>
+
+          <!-- Status -->
+          <div class="mb-3">
+            <label>Status</label>
+            <select name="product_type_status" class="form-select">
+
+              <option value="active"
+                <%= type.product_type_status === 'active' ? 'selected' : '' %>>
+                Active
+              </option>
+
+              <option value="inactive"
+                <%= type.product_type_status === 'inactive' ? 'selected' : '' %>>
+                Inactive
+              </option>
+
+            </select>
+          </div>
+
+          <!-- Image Preview -->
+          <div class="mb-3">
+            <label>Current Image</label><br>
+
+            <% if(type.product_type_image){ %>
+              <img src="/types/<%= type.product_type_image %>" width="100">
+            <% } else { %>
+              <p>No Image</p>
+            <% } %>
+          </div>
+
+          <!-- New Image -->
+          <div class="mb-3">
+            <label>Change Image</label>
+            <input type="file" name="product_type_image" class="form-control">
+          </div>
+
+          <button class="btn btn-success">Update</button>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<%- include('footer.ejs') %>

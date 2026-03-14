@@ -1,0 +1,30 @@
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+window.onload = function(){
+
+    var options = {
+        key: "rzp_test_SO1dqhmvu51B5K",
+
+        amount: "<%= order_info.total_amount * 100 %>", //
+        currency: "INR",
+
+        name: "Shoes Ecom",
+        description: "Order Payment",
+
+        callback_url: "http://localhost:1000/payment_success/<%= order_info.order_id %>",
+
+        prefill: {
+            name: "<%= order_info.full_name %>",
+            contact: "<%= order_info.mobile %>"
+        },
+
+        theme: {
+            color: "#3399cc"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+};
+</script>

@@ -1,0 +1,71 @@
+<%- include('navbar.ejs') %>
+
+<div class="main-content">
+  <div class="container mt-4">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+      <div class="card-header bg-warning text-dark">
+        <h5>✏️ Edit Slider</h5>
+      </div>
+
+      <div class="card-body">
+
+        <form action="/admin/update_slider" method="post" enctype="multipart/form-data">
+
+          <!-- hidden id -->
+          <input type="hidden" name="slider_id" value="<%= slider.slider_id %>">
+          <input type="hidden" name="old_image" value="<%= slider.slider_image %>">
+
+          <!-- Title -->
+          <div class="mb-3">
+            <label>Title</label>
+            <input type="text" name="slider_title" class="form-control"
+                   value="<%= slider.slider_title %>" required>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label>Description</label>
+            <textarea name="slider_description" class="form-control"><%= slider.slider_description %></textarea>
+          </div>
+
+          <!-- Button -->
+          <div class="mb-3">
+            <label>Button</label>
+            <input type="text" name="slider_button" class="form-control"
+                   value="<%= slider.slider_button %>">
+          </div>
+
+          <!-- Link -->
+          <div class="mb-3">
+            <label>Button Link</label>
+            <input type="text" name="slider_button_link" class="form-control"
+                   value="<%= slider.slider_button_link %>">
+          </div>
+
+          <!-- Image -->
+          <div class="mb-3">
+            <label>Change Image</label>
+            <input type="file" name="slider_image" class="form-control">
+          </div>
+
+          <!-- Old Image Preview -->
+          <% if(slider.slider_image){ %>
+            <div class="mb-3">
+              <img src="/slider/<%= slider.slider_image %>" width="120">
+            </div>
+          <% } %>
+
+          <button class="btn btn-success">💾 Update</button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<%- include('footer.ejs') %>

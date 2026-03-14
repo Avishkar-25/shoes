@@ -1,0 +1,31 @@
+<%- include('navbar.ejs') %>
+<h2>Refunded Orders</h2>
+<table class="table table-bordered mt-5">
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Customer</th>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Size</th>
+      <th>Total Amount</th>
+      <th>Refund Date</th>
+      <th>Payment ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% orders.forEach(order => { %>
+      <tr style="background-color:#f8d7da;">
+        <td><%= order.order_id %></td>
+        <td><%= order.full_name %></td>
+        <td><%= order.product_name %></td>
+        <td><%= order.product_qty %></td>
+        <td><%= order.product_size %></td>
+        <td>₹<%= order.total_amount %></td>
+        <td><%= order.refund_date ? order.refund_date.toISOString().slice(0,10) : '' %></td>
+        <td><%= order.transaction_id %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include('footer.ejs') %>

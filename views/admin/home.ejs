@@ -1,0 +1,139 @@
+<%- include('navbar.ejs') %>
+
+<style>
+/* Admin dashboard cards */
+.dashboard-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.dashboard-card h4 {
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.dashboard-card h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.dashboard-row {
+  margin-top: 50px;
+  margin-left:80px;
+  gap: 25px;
+}
+
+/* Container margin top */
+.admin-container {
+  margin-top: 80px; /* Navbar पासून space */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+</style>
+
+<div class="container admin-container">
+
+  <h2 class="mb-4 text-center fw-bold">Admin Dashboard</h2>
+
+  <div class="d-flex dashboard-row justify-content-center flex-wrap text-center">
+
+    <div class="col-md-3 mb-3">
+      <div class="card dashboard-card bg-primary text-white">
+        <div class="card-body">
+          <h4>Total Orders</h4>
+          <h2><%= total_orders %></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card dashboard-card bg-warning text-dark">
+        <div class="card-body">
+          <h4>Pending</h4>
+          <h2><%= pending_orders %></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card dashboard-card bg-success text-white">
+        <div class="card-body">
+          <h4>Delivered</h4>
+          <h2><%= delivered_orders %></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <div class="card dashboard-card bg-danger text-white">
+        <div class="card-body">
+          <h4>Cancelled</h4>
+          <h2><%= cancelled_orders %></h2>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Chart Section -->
+  <div class="card p-4 shadow-sm rounded-4 mt-5">
+    <h4 class="mb-4 text-center">Orders Overview</h4>
+    <canvas id="ordersChart" height="120"></canvas>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('ordersChart').getContext('2d');
+const ordersChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Total', 'Pending', 'Delivered', 'Cancelled'],
+        datasets: [{
+            label: 'Number of Orders',
+            data: [<%= total_orders %>, <%= pending_orders %>, <%= delivered_orders %>, <%= cancelled_orders %>],
+            backgroundColor: [
+                'rgba(0, 123, 255, 0.7)',
+                'rgba(255, 193, 7, 0.7)',
+                'rgba(40, 167, 69, 0.7)',
+                'rgba(220, 53, 69, 0.7)'
+            ],
+            borderColor: [
+                'rgba(0, 123, 255, 1)',
+                'rgba(255, 193, 7, 1)',
+                'rgba(40, 167, 69, 1)',
+                'rgba(220, 53, 69, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { stepSize: 1 }
+            }
+        }
+    }
+});
+</script>
+
+<%- include('footer.ejs') %>
