@@ -81,21 +81,32 @@ router.get("/buy_now/:product_id", check_login, async function(req, res){
 
     res.render("user/buy_now.ejs", { info, url_data });
 });
+router.post("/send_otp_mail", async function(req,res){
 
-router.post("/send_otp_mail",function(req,res){
-    var otp = parseInt(Math.random() *9000+999);
-    var subject = `StepStyle OTP Verification`
-    var message = `Your One Time Password (OTP) : ${otp}`;
+    try{
 
-    sendMail(req.body.email,subject,message);
-    req.session.otp = otp;
-    req.session.email = req.body.email;
+        var otp = Math.floor(100000 + Math.random()*900000);
 
+        var subject = "StepStyle OTP Verification";
+        var message = `Your OTP is: ${otp}`;
 
+        await sendMail(req.body.email, subject, message);
 
-    console.log(otp)
-  res.send("OTP SEND")
-})
+        req.session.otp = otp;
+        req.session.email = req.body.email;
+
+        console.log("OTP:", otp);
+
+        res.send("OTP SENT");
+
+    }catch(err){
+
+        console.log(err);
+        res.send("Email sending failed");
+
+    }
+
+});
  
 router.post("/verify_otp", async function(req, res) {
 
