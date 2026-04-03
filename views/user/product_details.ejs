@@ -1,0 +1,251 @@
+<%- include('navbar.ejs') %>
+<style>
+  /* Size Dropdown */
+#size{
+  border:2px solid #ddd;
+  border-radius:8px;
+  padding:8px 15px;
+  font-size:16px;
+  background:#f8f9fa;
+  transition:0.3s;
+}
+
+#size:hover{
+  border-color:#0d6efd;
+  background:#fff;
+}
+
+/* Quantity Box */
+.quantity-selector{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#f8f9fa;
+  padding:8px 12px;
+  border-radius:10px;
+  width:150px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Quantity Buttons */
+.quantity-btn{
+  width:35px;
+  height:35px;
+  border:none;
+  background:#0d6efd;
+  color:white;
+  font-size:20px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.quantity-btn:hover{
+  background:#0b5ed7;
+  transform:scale(1.05);
+}
+
+/* Quantity Input */
+.quantity-input{
+  width:50px;
+  text-align:center;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-weight:bold;
+  padding:4px;
+}
+
+/* Labels */
+label{
+  font-size:15px;
+  color:#333;
+}
+</style>
+<div class="container my-5">
+  <div class="row">
+
+    <% /* ✅ IMPORTANT: info empty असेल तर error avoid करण्यासाठी check */ %>
+    <% if(info.length > 0){ %>
+
+    <!-- Product Image -->
+    <div class="col-md-6">
+      <div class="card border-0">
+        <!-- ✅ product_main_image database मधून घेतलं -->
+        <img src="/product/<%=info[0].product_main_image%>" class="img-fluid rounded" alt="Sample Shoe">
+      </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="col-md-6">
+      <!-- ✅ product_name -->
+      <h3 class="fw-bold"><%=info[0].product_name%></h3>
+
+      <!-- ✅ product_for (male/female/kids) -->
+      <p class="text-muted"><%=info[0].product_for%></p>
+
+      <!-- Price -->
+      <h4 class="text-success fw-bold">
+        <!-- ✅ product_price -->
+        ₹<%= info[0].product_price %>
+
+        <!-- ❗ static MRP (optional) -->
+        <span class="text-muted text-decoration-line-through fs-6">₹2499</span>
+      </h4>
+
+      <!-- ✅ discount -->
+      <p class="text-success"><%= info[0].apply_discount_percent%> % off</p>
+
+      <!-- Size Selection -->
+      <div class="mb-3">
+        <label><b>SIZE</b></label>
+
+        <!-- ✅ size dropdown dynamic based on product_for -->
+        <select class="fw-bold mb-2" name="size" id="size">
+
+          <% if(info[0].product_for.toLowerCase() == 'male') { %>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          <% } %>
+
+          <% if(info[0].product_for.toLowerCase() == 'female') { %>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+          <% } %>
+
+          <% if(info[0].product_for.toLowerCase() == 'kids') { %>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          <% } %>
+
+        </select>
+      </div>
+
+      <!-- Quantity -->
+      <div class="mb-3">
+        <label class="fw-bold">Quantity</label>
+
+        <!-- ✅ qty increase/decrease -->
+        <div class="quantity-selector">
+          <button type="button" class="quantity-btn" onclick="decrease_qty()">-</button>
+
+          <!-- ✅ default qty = 1 -->
+          <input type="number" id="quantity" class="quantity-input" value="1" min="1">
+
+          <button type="button" class="quantity-btn" onclick="increase_qty()">+</button>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-flex gap-3 mb-4">
+
+        <!-- ❗❗ FIX: static 101 remove करून dynamic id वापर -->
+        <!-- ❌ old: /add_to_cart/101 -->
+        <!-- ✅ new dynamic -->
+        <button onclick="addToCart()" class="btn btn-primary">
+          <i class="fa fa-cart-shopping me-2"></i>Add to Cart
+        </button>
+
+        <!-- Buy Now -->
+        <% if(is_login) { %>
+          <!-- ✅ user login असेल तर direct buy -->
+          <button class="btn btn-success" onclick="buyNow()">
+            <i class="fa fa-bolt me-2"></i>Buy Now
+          </button>
+        <% } else { %>
+          <!-- ❗ login नसल्यास modal open -->
+          <button class="btn btn-success"
+onclick="saveRedirect('/buy_now/<%= info[0].product_id %>')"
+data-bs-toggle="modal"
+data-bs-target="#emailModal">
+
+<i class="fa fa-bolt me-2"></i>Buy Now
+
+</button>
+        <% } %>
+
+      </div>
+<% if(info[0].product_stock > 5){ %>
+
+<p class="text-success">
+✔ Available
+</p>
+
+<% } else if(info[0].product_stock > 0){ %>
+
+<p class="text-warning">
+⚠ Only <%= info[0].product_stock %> left
+</p>
+
+<% } else { %>
+
+<p class="text-danger">
+❌ Out Of Stock
+</p>
+
+<% } %>
+      <!-- Product Description -->
+      <h5 class="fw-bold">Product Description</h5>
+
+      <!-- ✅ description -->
+      <p class="text-muted">
+        <%= info[0].product_description %>
+      </p>
+    </div>
+
+    <% } else { %>
+
+      <!-- ❌ जर product सापडला नाही -->
+      <h3 class="text-danger text-center">Product Not Found</h3>
+
+    <% } %>
+
+  </div>
+</div>
+
+<%- include('footer.ejs') %>
+
+
+
+
+<script>
+
+  // ✅ qty increase
+  function increase_qty(){
+    let qty = Number(document.getElementById("quantity").value);
+    document.getElementById("quantity").value = qty + 1;
+  }
+
+  // ✅ qty decrease (min 1)
+  function decrease_qty(){
+    let qty = Number(document.getElementById("quantity").value);
+    document.getElementById("quantity").value = Math.max(1, qty - 1);
+  }
+
+  // ✅ Add to Cart (dynamic id + size + qty)
+  function addToCart(){
+    const productId = "<%= info[0].product_id %>";
+    const size = document.getElementById("size").value;
+    const qty = document.getElementById("quantity").value;
+
+    window.location.href = `/add_to_cart/${productId}?size=${size}&qty=${qty}`;
+  }
+
+  // ✅ Buy Now (dynamic id + size + qty)
+  function buyNow(){
+    const productId = "<%= info[0].product_id %>";
+    const size = document.getElementById("size").value;
+    const qty = document.getElementById("quantity").value;
+
+    window.location.href = `/buy_now/${productId}?size=${size}&qty=${qty}`;
+  }
+
+
+</script>

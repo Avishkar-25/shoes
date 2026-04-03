@@ -1,0 +1,85 @@
+<%- include('navbar.ejs') %>
+
+<style>
+/* Admin content spacing for sidebar */
+.admin-content{
+  margin-left:250px; /* sidebar width */
+  margin-top:80px;   /* top navbar height */
+  padding:20px;
+}
+
+/* Total Cancelled Orders Box */
+.total-orders-box{
+  background:#f8f9fa;
+  border-left:5px solid #dc3545; /* red for cancelled */
+  padding:15px 20px;
+  margin-bottom:20px;
+  font-weight:600;
+  border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .admin-content{
+    margin-left:0;
+    margin-top:90px;
+  }
+}
+</style>
+
+<div class="admin-content">
+
+  <!-- Total Cancelled Orders -->
+  <div class="total-orders-box">
+    Total Cancelled Orders: <%= cancelled_orders.length %>
+  </div>
+
+  <h2 class="mb-4">Cancelled Orders</h2>
+
+  <table class="table table-bordered text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Product</th>
+        <th>Amount</th>
+        <th>Payment</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if(cancelled_orders.length > 0){ %>
+        <% cancelled_orders.forEach(function(order, i){ %>
+          <tr>
+            <td>#<%= i +1 %></td>
+            <td><%= order.full_name %></td>
+            <td><%= order.product_name %></td>
+            <td>₹ <%= order.total_amount %></td>
+            <td><%= order.payment_method %></td>
+            <td class="text-danger"><%= order.order_status %></td>
+            <td>
+              <% if(order.payment_method === 'Online' && order.payment_status === 'paid'){ %>
+                <a href="/admin/refund/<%= order.transaction_id %>" 
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Refund this order?')">
+                  Refund
+                </a>
+              <% } else { %>
+                <span class="text-muted">No Refund</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="7">No Cancelled Orders</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+</div>
+
+<%- include('footer.ejs') %>

@@ -1,0 +1,96 @@
+<%- include('navbar.ejs') %>
+
+<style>
+/* Admin content spacing for sidebar */
+.admin-content{
+  margin-left:250px; /* sidebar width */
+  margin-top:80px;   /* top navbar height */
+  padding:20px;
+}
+
+/* Total Delivered Orders Box */
+.total-orders-box{
+  background:#f8f9fa;
+  border-left:5px solid #198754; /* green for delivered */
+  padding:15px 20px;
+  margin-bottom:20px;
+  font-weight:600;
+  border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .admin-content{
+    margin-left:0;
+    margin-top:90px;
+  }
+}
+</style>
+
+<div class="admin-content">
+
+  <!-- Total Delivered Orders -->
+  <div class="total-orders-box">
+    Total Delivered Orders: <%= orders.length %>
+  </div>
+
+  <h2 class="mb-4">Delivered Orders</h2>
+
+  <table class="table table-bordered text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Product</th>
+        <th>Amount</th>
+        <th>Payment</th>
+        <th>Status</th>
+        <th>Action</th>
+        <th>Track Order</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if(orders.length > 0){ %>
+        <% orders.forEach(function(order, i){ %>
+          <tr>
+            <td>#<%= i +1 %></td>
+            <td><%= order.full_name %></td>
+            <td><%= order.product_name %></td>
+            <td>₹ <%= order.total_amount %></td>
+            <td>
+              <% if(order.payment_method === 'Online'){ %>
+                <span class="badge bg-primary">Online</span>
+              <% } else { %>
+                <span class="badge bg-secondary">COD</span>
+              <% } %>
+            </td>
+            <td>
+              <% if(order.payment_status === 'paid'){ %>
+                <span class="badge bg-success">Paid</span>
+              <% } else { %>
+                <span class="badge bg-warning text-dark">Unpaid</span>
+              <% } %>
+            </td>
+            <td>
+              <span class="badge bg-success">Delivered</span>
+            </td>
+            <td>
+              <a href="/order_tracking/<%= order.order_id %>" 
+                 class="btn btn-info btn-sm">
+                 Track
+              </a>
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="8">No Delivered Orders</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+</div>
+
+<%- include('footer.ejs') %>

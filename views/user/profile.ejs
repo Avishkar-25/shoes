@@ -1,0 +1,228 @@
+<%- include('navbar.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #dadce2 0%, #dccaee 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+
+        /* Main profile content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+     
+       
+        
+
+      
+
+        .profile-header h1 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .profile-body {
+            padding: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin: 1rem 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .info-item:hover {
+            transform: translateX(10px);
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .info-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            word-break: break-word;
+        }
+
+        .edit-profile-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .edit-profile-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .edit-profile-btn i {
+            font-size: 1.2rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .profile-card {
+                margin: 1rem;
+            }
+            
+            .profile-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .info-item:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+ 
+    <!-- Main profile content -->
+    <main class="main-content">
+       
+            
+            <div class="profile-body">
+                <!-- Display Name -->
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Display Name</div>
+                        <div class="info-value"><%= result[0].name %></div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: #667eea;"></i>
+                </div>
+
+                <!-- Email -->
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Email Address</div>
+                        <div class="info-value"><%= result[0].email %></div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: #667eea;"></i>
+                </div>
+
+                <!-- Mobile -->
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Mobile Number</div>
+                        <div class="info-value"><%= result[0].mobile %></div>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: #667eea;"></i>
+                </div>
+
+                <!-- Additional info can be added here -->
+              
+                    
+
+               <!-- Edit Profile Button -->
+<a href="/edit_profile" class="edit-profile-btn">
+    <i class="fas fa-edit"></i>
+    Edit Profile
+</a>
+            </div>
+        </div>
+    </main>
+
+  
+
+<%- include('footer.ejs') %>

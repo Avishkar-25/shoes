@@ -1,0 +1,184 @@
+<%- include('navbar.ejs') %>
+
+
+
+
+
+
+<div class="container mt-5 me-0">
+  <div class="row justify-content-center mt-5 ">
+    <div class="col-lg-10 ">
+      <div class="card shadow-lg border-0 rounded-4 mt-5 ">
+        
+        <!-- Header -->
+        <div class="card-header bg-dark text-white text-center rounded-top-4 mt-5 ">
+          <h4 class="mb-0 mt-5" ><i class="bi bi-bag-plus"></i> Add New Product</h4>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4">
+          <form method="post" action="/admin/save_product" enctype="multipart/form-data">
+
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <label class="form-label">Product Name</label>
+                <input type="text" class="form-control" name="product_name" placeholder="Enter product name">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label"> Product Market Price (₹)</label>
+                <input type="number" name="product_market_price" class="form-control">
+              </div>
+
+              
+
+              <div class="col-md-12">
+                <label class="form-label">Product Price  (₹)</label>
+                <input type="number" class="form-control" name="product_price"  rows="3">
+              </div>
+
+              
+              <div class="col-md-6">
+                <label class="form-label">Main Image</label>
+                <input type="file" class="form-control" name="product_main_image">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label"> Product is Trending</label>
+                <select class="form-select" name="product_is_trending">
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label"> Product Brand</label>
+                <select name="product_brand_id" class="form-select mt-2">
+  <% for (let i = 0; i < brands.length; i++) { %>
+    <option value="<%= brands[i].product_brand_id %>">
+      <%= brands[i].product_brand_name %>
+    </option>
+  <% } %>
+</select>
+
+              </div>
+             
+              <div class="col-md-4">
+                <label class="form-label"> Product Style</label>
+                <select name="product_style_id" class="form-select mt-2">
+  <% for (let i = 0; i < styles.length; i++) { %>
+    <option value="<%= styles[i].product_style_id %>">
+      <%= styles[i].product_style_name %>
+    </option>
+  <% } %>
+</select>
+
+              </div>
+
+              <div class="col-md-4">
+  <label class="form-label"> Product For</label>
+  <select class="form-select" name="product_for" id="product_for" required>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+    <option value="kids">Kids</option>
+  </select>
+</div>
+
+<div class="col-md-4">
+  <label class="form-label"> Kid Type</label>
+  <select class="form-select" name="product_kid_type" id="product_kid_type" disabled required>
+    <option value="">Select Kid Type</option>
+    <option value="boys">Boys</option>
+    <option value="girls">Girls</option>
+  </select>
+</div>
+
+<script>
+document.getElementById("product_for").addEventListener("change", function () {
+    const kidType = document.getElementById("product_kid_type");
+
+    if (this.value === "kids") {
+        kidType.disabled = false;
+    } else {
+        kidType.disabled = true;
+        kidType.value = "";
+    }
+});
+</script>
+
+              <div class="col-md-4">
+                <label class="form-label"> Product  Type</label>
+                <select name="product_type_id" class="form-select mt-2">
+  <% for (let i = 0; i < types.length; i++) { %>
+    <option value="<%= types[i].product_type_id %>">
+      <%= types[i].product_type_name %>
+    </option>
+  <% } %>
+</select>
+
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Avaliable Stock  </label>
+                <input type="number" class="form-control" name="product_stock"  rows="3">
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Product Color  </label>
+                <input type="text" class="form-control" name="product_color"  rows="3">
+              </div>
+             
+              <div class="col-md-12">
+                <label class="form-label"> Product Description</label>
+                <textarea class="form-control" name="product_description" id="editor" rows="3"></textarea>
+              </div>
+
+            </div>
+
+            <div class="text-center mt-4">
+              <button class="btn btn-success px-5">
+                <i class="bi bi-save"></i> Save Product
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function showHidekidType() {
+    var sel = document.getElementById('product_for').value;
+    if(sel == 'kids'){
+      document.getElementById('product_type').removeAttribute('disabled');
+    } else {
+      document.getElementById('product_type').disabled = true;
+      
+    }
+  }
+</script>
+<%- include('footer.ejs') %>
+
+
+<!-- products 
+   product_id
+   product_name varchar(200)
+   product_market_price decimal
+   apply_discount_percent decimal
+   product_price decimal
+    product_description text
+    product_main_image varchar(300)
+    product_rating decimal
+    product_is_trending enum('yes','no')
+    product_brand_id int
+    product_style_id int
+    product_for enum('male','female','kids')
+    product_kid_type enum('boys','girls')
+    product_type_id int
+    offer_expiry_date date
+    product_added_date datetime
+    product_stock int
+    product_color varchar(100)
+    status enum('active','inactive') -->

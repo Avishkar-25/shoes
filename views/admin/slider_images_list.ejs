@@ -1,0 +1,186 @@
+<%- include('navbar.ejs') %>
+
+<div class="main-content">
+  <div class="container mt-4">
+
+    <!-- HEADER CARD -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+      <div class="card-header text-white d-flex justify-content-between align-items-center header-gradient">
+        <h5 class="mb-0">📋 Slider Images</h5>
+
+        <a href="/admin/slider_images" class="btn btn-light btn-sm rounded-pill">
+          ➕ Add Slider
+        </a>
+      </div>
+
+      <!-- TABLE -->
+      <div class="card-body p-0">
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle text-center mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th>Action</th>
+                <th>#</th>
+                <th>Preview</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Button</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if(result.length > 0){ %>
+
+                <% result.forEach((row, i) => { %>
+                  <tr class="table-row">
+
+                    <!-- Action -->
+                    <td>
+                      <a href="/admin/edit_slider/<%= row.slider_id %>"
+                         class="btn btn-sm btn-warning action-btn">✏️</a>
+
+                      <a href="/admin/delete_slider/<%= row.slider_id %>"
+                         class="btn btn-sm btn-danger action-btn"
+                         onclick="return confirm('Are you sure?')">🗑</a>
+                    </td>
+
+                    <!-- Index -->
+                    <td><%= i + 1 %></td>
+
+                    <!-- Image -->
+                    <td>
+                      <% if(row.slider_image){ %>
+                        <img src="/slider/<%= row.slider_image %>" class="img-thumb">
+                      <% } else { %>
+                        <span class="text-muted">No Image</span>
+                      <% } %>
+                    </td>
+
+                    <!-- Title -->
+                    <td class="fw-semibold text-primary">
+                      <%= row.slider_title %>
+                    </td>
+
+                    <!-- Description -->
+                    <td class="text-muted small">
+                      <%= row.slider_description %>
+                    </td>
+
+                    <!-- Button -->
+                    <td>
+                      <span class="badge gradient-badge">
+                        <%= row.slider_button %>
+                      </span>
+                    </td>
+
+                    <!-- Link -->
+                    <td>
+                      <a href="<%= row.slider_button_link %>" target="_blank"
+                         class="link-btn">
+                        🔗 Visit
+                      </a>
+                    </td>
+
+                  </tr>
+                <% }) %>
+
+              <% } else { %>
+
+                <tr>
+                  <td colspan="7" class="text-muted py-4">
+                    🚫 No slider data found
+                  </td>
+                </tr>
+
+              <% } %>
+            </tbody>
+
+          </table>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- STYLES -->
+<style>
+.main-content {
+    margin-left: 240px;
+    margin-top: 80px;
+    padding: 20px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Header Gradient */
+.header-gradient {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Table Row Hover */
+.table-row:hover {
+    background: #f8f9ff;
+    transform: scale(1.01);
+    transition: 0.2s;
+}
+
+/* Image */
+.img-thumb {
+    width: 90px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.img-thumb:hover {
+    transform: scale(1.1);
+}
+
+/* Action Buttons */
+.action-btn {
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    padding: 5px;
+}
+
+/* Badge */
+.gradient-badge {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 20px;
+}
+
+/* Link */
+.link-btn {
+    text-decoration: none;
+    font-weight: 500;
+    color: #6c63ff;
+}
+.link-btn:hover {
+    text-decoration: underline;
+}
+
+/* Card Shadow Glow */
+.card {
+    transition: 0.3s;
+}
+.card:hover {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+</style>
+
+<%- include('footer.ejs') %>

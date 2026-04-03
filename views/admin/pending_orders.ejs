@@ -1,0 +1,92 @@
+<%- include('navbar.ejs') %>
+
+<style>
+/* sidebar space */
+.admin-content{
+  margin-left:250px;
+  margin-top:80px;
+  padding:20px;
+}
+
+/* total orders box */
+.total-orders-box{
+  background:#f8f9fa;
+  border-left:5px solid #0d6efd;
+  padding:15px 20px;
+  margin-bottom:20px;
+  font-weight:600;
+  border-radius:8px;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* mobile responsive */
+@media(max-width:768px){
+  .admin-content{
+    margin-left:0;
+    margin-top:90px;
+  }
+}
+</style>
+
+<div class="admin-content">
+
+  <!-- Total Orders Box -->
+  <div class="total-orders-box">
+    Total Pending Orders: <%= orders.length %>
+  </div>
+
+  <h2 class="mb-4">Pending Orders</h2>
+
+  <table class="table table-bordered text-center">
+
+    <thead class="table-dark">
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>Amount</th>
+        <th>Payment</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if(orders.length > 0){ %>
+        <% orders.forEach(function(order, i){ %>
+          <tr>
+            <td>#<%= i +1 %></td>
+            <td><%= order.full_name %></td>
+            <td><%= order.product_name %></td>
+            <td><%= order.quantity %></td>
+            <td>₹ <%= order.total_amount %></td>
+            <td><%= order.payment_method %></td>
+            <td>
+              <% if(order.payment_status === 'paid'){ %>
+                <span class="badge bg-success">Paid</span>
+              <% } else { %>
+                <span class="badge bg-warning text-dark">Unpaid</span>
+              <% } %>
+            </td>
+           <td>
+<a href="/admin/dispatch_orders/<%= order.order_id %>"
+   class="btn btn-primary btn-sm"
+   onclick="return confirm('Dispatch this order?')">
+Dispatch
+</a>
+</td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="8">No Pending Orders</td>
+        </tr>
+      <% } %>
+    </tbody>
+
+  </table>
+
+</div>
+
+<%- include('footer.ejs') %>

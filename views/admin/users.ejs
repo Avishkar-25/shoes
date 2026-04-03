@@ -1,0 +1,72 @@
+<%- include('navbar.ejs') %>
+
+<div class="main-content">
+    <div class="content-wrapper">
+
+        <!-- Page Title -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold">Customers List</h3>
+        </div>
+
+        <!-- Search Box -->
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search customer...">
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle" id="customerTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Action</th>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Mobile</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let i = 1; %>
+                    <% users.forEach(function(u){ %>
+                        <tr>
+                            <td>
+                                <!-- Edit Button -->
+                                <a href="/admin/user/<%= u.customer_id %>/edit" 
+                                   class="btn btn-sm btn-outline-primary me-1">
+                                   Edit
+                                </a>
+
+                                <!-- Delete Button -->
+                                <a href="/admin/delete_user/<%= u.customer_id %>" 
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('Are you sure you want to delete this user?')">
+                                   Delete
+                                </a>
+                            </td>
+                            <td><%= i++ %></td>
+                            <td><%= u.name %></td>
+                            <td><%= u.email %></td>
+                            <td><%= u.mobile %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- 🔍 Search Script -->
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#customerTable tbody tr");
+
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(value) ? "" : "none";
+        });
+    });
+</script>
+
+<%- include('footer.ejs') %>

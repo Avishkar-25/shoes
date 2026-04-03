@@ -1,0 +1,131 @@
+<%- include('navbar.ejs') %>
+
+<style>
+body {
+    background: #f4f6fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.checkout-card {
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    background: #fff;
+}
+.product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+}
+.total-box {
+    background: #f0f3f8;
+    border-radius: 12px;
+    padding: 15px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.btn-checkout {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+    font-weight: 600;
+    padding: 12px 0;
+    border: none;
+    border-radius: 10px;
+    transition: 0.3s ease;
+}
+.btn-checkout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+h2 {
+    color: #333;
+}
+h5 {
+    color: #555;
+}
+</style>
+
+<div class="container my-5">
+  <h2 class="fw-bold mb-5 text-center">Checkout</h2>
+
+  <form action="/checkout_order" method="post">
+    <div class="row g-4">
+
+      <!-- Shipping Address -->
+      <div class="col-lg-7">
+        <div class="card p-4 checkout-card">
+          <h5 class="fw-bold mb-4">Shipping Address</h5>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Full Name</label>
+              <input type="text" class="form-control" name="full_name" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Mobile</label>
+              <input type="tel" class="form-control" name="mobile" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Pincode</label>
+              <input type="text" class="form-control" name="pincode" onkeyup='getStateAndCity()'  id="pincode">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">City</label>
+              <input type="text" class="form-control" name="city" id="city" readonly required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Address</label>
+              <textarea class="form-control" name="address" rows="3" id="address"></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">State</label>
+              <input type="text" class="form-control" name="state" id="state" readonly required>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Summary -->
+      <div class="col-lg-5">
+        <div class="card p-4 checkout-card">
+          <h5 class="fw-bold mb-4">Product Details</h5>
+
+          <div class="d-flex align-items-center mb-3">
+            <img src="/product/<%= info[0].product_main_image %>" class="product-img me-3">
+            <div>
+              <h6 class="fw-bold"><%= info[0].product_name %></h6>
+              <p class="mb-1 text-muted">Qty: <%= url_data.qty %> | Size: <%= url_data.size %></p>
+              <p class="mb-0 text-success fw-semibold">Price: ₹<%= info[0].product_price %></p>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="total-box d-flex justify-content-between mb-3">
+            <span>Total Price</span>
+            <span>₹<%= info[0].product_price * url_data.qty %></span>
+          </div>
+
+          <!-- Hidden Inputs -->
+          <input type="hidden" name="product_id" value="<%= info[0].product_id %>">
+          <input type="hidden" name="product_name" value="<%= info[0].product_name %>">
+          <input type="hidden" name="product_price" value="<%= info[0].product_price %>">
+          <input type="hidden" name="product_qty" value="<%= url_data.qty %>">
+          <input type="hidden" name="product_size" value="<%= url_data.size %>">
+
+          <button type="submit" class="btn btn-checkout w-100 mt-4">
+            Place Order
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<%- include('footer.ejs') %>

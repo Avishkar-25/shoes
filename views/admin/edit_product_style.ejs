@@ -1,0 +1,78 @@
+<%- include('navbar.ejs') %>
+
+<div class="main-content">
+  <div class="container mt-4">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+      <!-- Header -->
+      <div class="card-header bg-warning text-dark rounded-top-4">
+        <h5 class="mb-0">✏️ Edit Product Style</h5>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body p-4">
+
+        <form action="/admin/update_product_style" method="post" enctype="multipart/form-data">
+
+          <!-- Hidden ID -->
+          <input type="hidden" name="product_style_id" value="<%= style.product_style_id %>">
+
+          <!-- ✅ ADD THIS -->
+          <input type="hidden" name="old_image" value="<%= style.product_style_image %>">
+
+          <!-- Name -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Style Name</label>
+            <input type="text" name="product_style_name"
+                   value="<%= style.product_style_name %>"
+                   class="form-control" required>
+          </div>
+
+          <!-- Status -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Status</label>
+            <select name="product_style_status" class="form-select" required>
+
+              <option value="active"
+                <%= style.product_style_status === 'active' ? 'selected' : '' %>>
+                Active
+              </option>
+
+              <option value="inactive"
+                <%= style.product_style_status === 'inactive' ? 'selected' : '' %>>
+                Inactive
+              </option>
+
+            </select>
+          </div>
+
+          <!-- Image Preview -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Current Image</label><br>
+
+            <% if(style.product_style_image){ %>
+              <img src="/styles/<%= style.product_style_image %>" width="100" class="mb-2">
+            <% } else { %>
+              <p class="text-muted">No Image</p>
+            <% } %>
+          </div>
+
+          <!-- New Image -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Change Image</label>
+            <input type="file" name="product_style_image" class="form-control">
+          </div>
+
+          <!-- Submit -->
+          <button class="btn btn-success">Update Style</button>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('footer.ejs') %>
